@@ -37,15 +37,19 @@ function renderToyCard(toy) {
 
 	const h = document.createElement("h2");
 	h.innerHTML = toy.name;
+
 	const img = document.createElement("img");
 	img.className = "toy-avatar";
 	img.src = toy.image;
 
 	const p = document.createElement("p");
-	p.innerHTML = `${toy.likes} likes`
+	p.innerHTML = `${toy.likes} likes`;
+
 	const likeBtn = document.createElement("button");
+	likeBtn.addEventListener("click", handleLikeBtn);
 	likeBtn.className = "like-btn";
-	likeBtn.innerHTML = "like";
+	likeBtn.setAttribute("data-id", toy.id);
+	likeBtn.innerHTML = "Like";
 
 	list.appendChild(card);
 
@@ -84,5 +88,27 @@ function addToyCard(toy) {
           .then(resp => resp.json())
           .then (json => renderToyCard(json));
 }
+
+function handleLikeBtn(e) {
+  let moreLikes = parseInt(e.target.previousElementSibling.innerText) + 1;
+
+  options = {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({
+      likes: moreLikes
+    })
+    }
+
+  fetch(`http://localhost:3000/toys/${e.target.dataset.id}`, options)
+    .then(resp => resp.json())
+    .then(data => {
+      e.target.previousElementSibling.innerText = `${moreLikes} likes`
+    });
+}
+
 
 
