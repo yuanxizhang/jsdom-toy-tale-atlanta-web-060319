@@ -62,7 +62,8 @@ function handleSubmit(e){
      						  image: e.target.image.value
   							}
   addToyCard(toyFormData);
-
+  document.querySelector(".add-toy-form").reset();
+  return false;
 }
 
 function addToyCard(toy) {
