@@ -30,10 +30,10 @@ function renderToys(toys) {
 }
 
 function renderToyCard(toy) {
-	const list = document.getElementById("toy-collection");
+	const collection = document.getElementById("toy-collection");
 	const card = document.createElement("div");
 	card.setAttribute('class', "card");
-	card.setAttribute("data-id", `${toy.id}`)
+	card.setAttribute("data-id", `${toy.id}`);
 
 	const h = document.createElement("h2");
 	h.innerHTML = toy.name;
@@ -46,53 +46,61 @@ function renderToyCard(toy) {
 	p.innerHTML = `${toy.likes} likes`;
 
 	const likeBtn = document.createElement("button");
-	likeBtn.addEventListener("click", handleLikeBtn);
-	likeBtn.className = "like-btn";
+	likeBtn.addEventListener("click", handleLike);
 	likeBtn.setAttribute("data-id", toy.id);
+	likeBtn.className = "like-btn";
 	likeBtn.innerHTML = "Like";
 
-	list.appendChild(card);
+	const deleteBtn = document.createElement("button");
+	deleteBtn.addEventListener("click", handleDelete);
+	deleteBtn.setAttribute("data-id", toy.id);
+	deleteBtn.className = "delete-btn";
+	deleteBtn.innerHTML = "Delete";
+
+	collection.appendChild(card);
 
 	card.appendChild(h);
 	card.appendChild(img);
 	card.appendChild(p);
 	card.appendChild(likeBtn);
+	card.appendChild(deleteBtn);
 }
 
 function handleSubmit(e){
   e.preventDefault()
   let toyFormData = {
-  								name: e.target.name.value,
-     						  image: e.target.image.value
-  							}
-  addToyCard(toyFormData);
+	  								name: e.target.name.value,
+	     						  image: e.target.image.value
+  									}
+  addNewToy(toyFormData);
   document.querySelector(".add-toy-form").reset();
   return false;
 }
 
-function addToyCard(toy) {
-	options = {
-		method: "POST",
-		headers: 
-						{
-							 "Content-Type": "application/json",
-								Accept: "application/json"
-						},
-		body: 	JSON.stringify({
-				      name: toy.name,
-				      image: toy.image,
-				      likes: 0
-				    })
+function addNewToy(toy) {
+	let options = {
+									method: "POST",
+									headers: 
+													{
+														 "Content-Type": "application/json",
+															Accept: "application/json"
+													},
+									body: 	JSON.stringify({
+											      name: toy.name,
+											      image: toy.image,
+											      likes: 0
+											    })
 	}
   fetch(TOYS_URL, options)
           .then(resp => resp.json())
-          .then (json => renderToyCard(json));
+          .then (json => renderToyCard(json))
+          .catch(err => console.log(err));
 }
 
-function handleLikeBtn(e) {
+function handleLike(e) {
   let moreLikes = parseInt(e.target.previousElementSibling.innerText) + 1;
 
-  options = {
+  let options = {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -103,12 +111,35 @@ function handleLikeBtn(e) {
     })
     }
 
-  fetch(`http://localhost:3000/toys/${e.target.dataset.id}`, options)
+  fetch(TOYS_URL + `/${e.target.dataset.id}`, options)
     .then(resp => resp.json())
     .then(data => {
       e.target.previousElementSibling.innerText = `${moreLikes} likes`
     });
 }
+
+function handleDelete(e) {
+		let toyObj = {
+				 "id": e.target.parentElement.dataset.id
+		};
+    let options = {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(toyObj)
+    };
+
+    fetch(TOYS_URL + `/${toyObj.id}`, options)
+        .then(res => res.json())
+        .then(obj => console.log(toyObj.id))
+        .catch(err => console.log(err));
+
+    e.target.parentElement.remove();
+
+}
+
 
 
 
