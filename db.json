@@ -34,7 +34,7 @@
       "id": 7,
       "name": "Hamm",
       "image": "https://cdn140.picsart.com/244090226021212.png?r1024x1024",
-      "likes": 1
+      "likes": 2
     },
     {
       "id": 8,
@@ -47,6 +47,12 @@
       "image": "http://www.pngmart.com/files/3/Toy-Story-Jessie-PNG-Photos.png",
       "likes": 3,
       "id": 20
+    },
+    {
+      "name": "Jessie",
+      "image": "http://www.pngmart.com/files/3/Toy-Story-Jessie-PNG-Image.png",
+      "likes": 1,
+      "id": 21
     }
   ]
 }

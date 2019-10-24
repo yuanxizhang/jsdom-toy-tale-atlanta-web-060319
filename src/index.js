@@ -3,6 +3,9 @@ const toyForm = document.querySelector('.container')
 const TOYS_URL = "http://localhost:3000/toys"
 let addToy = false
 
+let form = document.querySelector(".add-toy-form");
+form.addEventListener("submit", handleSubmit);
+
 addBtn.addEventListener('click', () => {
   // hide & seek with the form
   addToy = !addToy
@@ -13,9 +16,7 @@ addBtn.addEventListener('click', () => {
   }
 })
 
-document.addEventListener('DOMContentLoaded', () => {
-		let form = document.querySelector(".add-toy-form");
-  	form.addEventListener("submit", handleSubmit);
+document.addEventListener('DOMContentLoaded', () => {		
     fetchToys();
 })
 
@@ -133,7 +134,7 @@ function handleDelete(e) {
 
     fetch(TOYS_URL + `/${toyObj.id}`, options)
         .then(res => res.json())
-        .then(obj => console.log(toyObj.id))
+        .then(obj => console.log(`Removed toy ${toyObj.name} with id ${toyObj.id}!`))
         .catch(err => console.log(err));
 
     e.target.parentElement.remove();

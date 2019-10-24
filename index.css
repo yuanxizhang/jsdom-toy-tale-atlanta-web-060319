@@ -19,6 +19,7 @@ body {
 
 #new-toy-btn {
   position: relative;
+  display: inline-block;
   background-color: #e04b52;
   border: none;
   border-radius: 5px;
